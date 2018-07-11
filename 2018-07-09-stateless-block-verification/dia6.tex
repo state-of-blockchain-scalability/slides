@@ -1,0 +1,30 @@
+    \begin{tikzpicture}[-latex,
+every node/.style = {shape=circle, line width=1pt, color=black,
+  draw, align=center, text width=1.5em, minimum height=1.5em,
+  blur shadow={shadow blur extra rounding, shadow xshift=2pt, shadow yshift=-2pt},
+  fill=boxbg},
+witness/.style = {
+  postaction = { pattern=north west lines }, pattern color=boxredish
+},
+note/.style = {
+  fill=none, color=white, text width=20em, blur shadow={shadow opacity=0}, text=black
+},
+  edge from parent/.style = {line width=1pt, draw},
+level 1/.style={sibling distance=7.5em},
+level 2/.style={sibling distance=4em},
+level 3/.style={sibling distance=3.5em},
+level distance=2.75em
+]
+\node {}
+  child { node {}
+    child { node {$a$} }
+    child { node {$b$} }
+  }
+  child { node {}
+    child { node {$c$} }
+    child { node (d) {$d$} }
+  };
+\node [right of=d,xshift=3em,fill=white] (bottom) {};
+\node [right of=bottom,xshift=3em] {$e$};
+
+\end{tikzpicture}
