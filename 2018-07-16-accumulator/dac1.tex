@@ -1,0 +1,87 @@
+    \begin{tikzpicture}[-latex,scale=0.5,
+%every node/.style = {shape=circle, line width=1pt, color=black,
+%  draw, align=center, text width=1.5em, minimum height=1.5em,
+%  blur shadow={shadow blur extra rounding, shadow xshift=2pt, shadow yshift=-2pt},
+%  fill=boxbg},
+witness/.style = {
+  postaction = { pattern=north west lines }, pattern color=boxredish
+},
+note/.style = {
+  fill=none, color=white, text width=20em, blur shadow={shadow opacity=0}, text=black
+},
+  edge from parent/.style = {line width=1pt, draw},
+level 1/.style={sibling distance=7.5em},
+level 2/.style={sibling distance=4em},
+level 3/.style={sibling distance=3.5em},
+level distance=2.75em,
+merkle/.style= {line width=1pt, color=black,
+  blur shadow={shadow blur extra rounding, shadow xshift=2pt, shadow yshift=-2pt},
+  fill=boxbg}
+]
+
+\coordinate (sep) at (0,-0.1);
+\coordinate (a) at (0,0);
+
+\pgfmathsetmacro{\side}{1}
+\coordinate (m) at ($ (a) + (-3*\side,0) $);
+\draw [merkle] (m) node{ }
+  -- ($ (m) + (-1*\side,0) $) node{ }
+  -- ($ (m) + (-0.5*\side,\side) $) node{ }
+  -- ($ (m) + (-1/8*\side,1.732051/8*\side) $) node { }
+  -- ($ (m) + (0,0.5*\side) $) node { }
+  -- ($ (m) + (1/4*\side-1/8/2*\side,1.732051/8/2*\side) $) node { }
+  -- ($ (m) + (1/4*\side,1/4*\side) $) node { }
+  -- ($ (m) + (1/4*\side+1/8*\side,0) $) node { }
+  -- cycle;
+\coordinate (m) at ($ (a) + (-1*\side,0) $);
+\draw [merkle] (m) node{ }
+  -- ($ (m) + (-1*\side,0) $) node{ }
+  -- ($ (m) + (-0.5*\side,\side) $) node{ }
+  -- ($ (m) + (-1/8*\side,1.732051/8*\side) $) node { }
+  -- ($ (m) + (0,0.5*\side) $) node { }
+  -- ($ (m) + (1/4*\side-1/8/2*\side,1.732051/8/2*\side) $) node { }
+  -- ($ (m) + (1/4*\side,1/4*\side) $) node { }
+  -- ($ (m) + (1/4*\side+1/8*\side,0) $) node { }
+  -- cycle;
+\coordinate (m) at ($ (a) + (1*\side,0) $);
+\draw [merkle] (m) node{ }
+  -- ($ (m) + (-1*\side,0) $) node{ }
+  -- ($ (m) + (-0.5*\side,\side) $) node{ }
+  -- ($ (m) + (-1/8*\side,1.732051/8*\side) $) node { }
+  -- ($ (m) + (0,0.5*\side) $) node { }
+  -- ($ (m) + (1/4*\side-1/8/2*\side,1.732051/8/2*\side) $) node { }
+  -- ($ (m) + (1/4*\side,1/4*\side) $) node { }
+  -- ($ (m) + (1/4*\side+1/8*\side,0) $) node { }
+  -- cycle;
+\coordinate (m) at ($ (a) + (3*\side,0) $);
+\draw [merkle] (m) node{ }
+  -- ($ (m) + (-1*\side,0) $) node{ }
+  -- ($ (m) + (-0.5*\side,\side) $) node{ }
+  -- ($ (m) + (-1/8*\side,1.732051/8*\side) $) node { }
+  -- ($ (m) + (0,0.5*\side) $) node { }
+  -- ($ (m) + (1/4*\side-1/8/2*\side,1.732051/8/2*\side) $) node { }
+  -- ($ (m) + (1/4*\side,1/4*\side) $) node { }
+  -- ($ (m) + (1/4*\side+1/8*\side,0) $) node { }
+  -- cycle;
+\node [above of=a,xshift=0,yshift=15,text width=4cm] {{\scriptsize Cyclic partitioning ($2^n$ MMRs), push a collation with height $i$ to MMR $i \mod 2^n$}};
+
+\pgfmathsetmacro{\side}{2}
+\coordinate (b) at ($ (a) + (sep) + (1/4*\side,0) $);
+\draw [merkle] (b) node{ }
+  -- ($ (b) + (0.5*0.5*\side,-1*\side) $) node (logi) { }
+  -- ($ (b) + (-0.5*0.5*\side,-1*\side) $) node{ }
+  -- cycle;
+\node [below of=logi,yshift=15] {{\scriptsize Batching (Merkle tree), log batch root}};
+%\node {}
+%  child { node {}
+%    child { node {$a$} }
+%    child { node {$b$} }
+%  }
+%  child { node {}
+%    child { node {$c$} }
+%    child { node (d) {$d$} }
+%  };
+%\node [right of=d,xshift=3em,fill=white] (bottom) {};
+%\node [right of=bottom,xshift=3em] {$e$};
+
+\end{tikzpicture}

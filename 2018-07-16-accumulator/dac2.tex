@@ -1,0 +1,65 @@
+    \begin{tikzpicture}[scale=0.5,
+%every node/.style = {shape=circle, line width=1pt, color=black,
+%  draw, align=center, text width=1.5em, minimum height=1.5em,
+%  blur shadow={shadow blur extra rounding, shadow xshift=2pt, shadow yshift=-2pt},
+%  fill=boxbg},
+witness/.style = {
+  postaction = { pattern=north west lines }, pattern color=boxredish
+},
+note/.style = {
+  fill=none, color=white, text width=20em, blur shadow={shadow opacity=0}, text=black
+},
+  edge from parent/.style = {line width=1pt, draw},
+level 1/.style={sibling distance=7.5em},
+level 2/.style={sibling distance=4em},
+level 3/.style={sibling distance=3.5em},
+level distance=2.75em,
+merkle/.style= {line width=1pt, color=black,
+  blur shadow={shadow blur extra rounding, shadow xshift=2pt, shadow yshift=-2pt},
+  fill=boxbg}
+]
+
+\coordinate (sep) at (0,-0.1);
+\coordinate (a) at (0,0);
+
+\pgfmathsetmacro{\side}{2}
+\coordinate (m) at ($ (a) - (sep) + (0.5*\side,0) $);
+\draw [line width=0pt, color=white, fill=boxbg, blur shadow={shadow blur extra rounding, shadow xshift=2pt, shadow yshift=-2pt}] (m) node{ }
+  -- ($ (m) + (-1.5*\side,0) $) node{ }
+  -- ($ (m) + (-1.5*\side,0.2*\side) $) node{ }
+  -- ($ (m) + (0,0.2*\side) $) node { }
+  -- cycle;
+\draw [line width=1pt, color=black] (m) node{ }
+  -- ($ (m) + (-1.5*\side,0) $) node{ }
+  -- ($ (m) + (-1.5*\side,0.2*\side) $) node{ }
+  -- ($ (m) + (0,0.2*\side) $) node { }
+  ;
+\node [right of=m,xshift=47,yshift=0,text width=4.5cm] {{\scriptsize Top buffer (linear), +15kb per year if collation interval is 8 seconds and $n = 13$}};
+
+\pgfmathsetmacro{\side}{4}
+\draw [merkle] (a) node{ }
+  -- ($ (a) + (0.5*\side,-1*\side) $) node (mt) { }
+  -- ($ (a) + (-0.5*\side,-1*\side) $) node{ }
+  -- cycle;
+\node [right of=mt,xshift=35,yshift=10,text width=4cm] {{\scriptsize Bottom buffer with $2^n$ entries (Merkle tree) 250kb}};
+
+\coordinate (b) at ($ (a) + (-0.2*\side,-1*\side) + (sep) $);
+\pgfmathsetmacro{\side}{2}
+\draw [merkle] (b) node{ }
+  -- ($ (b) + (0.5*0.5*\side,-1*\side) $) node (logi) { }
+  -- ($ (b) + (-0.5*0.5*\side,-1*\side) $) node{ }
+  -- cycle;
+\node [below of=logi,yshift=15] {{\scriptsize Merkle tree of all logs of shard height $i \mod 2^n$}};
+%\node {}
+%  child { node {}
+%    child { node {$a$} }
+%    child { node {$b$} }
+%  }
+%  child { node {}
+%    child { node {$c$} }
+%    child { node (d) {$d$} }
+%  };
+%\node [right of=d,xshift=3em,fill=white] (bottom) {};
+%\node [right of=bottom,xshift=3em] {$e$};
+
+\end{tikzpicture}
