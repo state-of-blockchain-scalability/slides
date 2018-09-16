@@ -1,0 +1,138 @@
+\documentclass{beamer}
+%\usepackage[scaled]{helvet}
+\usepackage{booktabs}
+\usepackage{bbding}
+\usepackage{pdfpages}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[normalem]{ulem}
+\usepackage{tikz}
+\usetikzlibrary{shadows}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+%\usepackage{kotex}
+%\usetheme[progressbar=foot,outer/numbering=none]{metropolis}           % Use metropolis theme
+\usetheme{metropolis}           % Use metropolis theme
+\usecolortheme{metropolis-highcontrast}
+
+% https://github.com/matze/mtheme/issues/308
+\usefonttheme{professionalfonts}
+\usepackage{unicode-math}
+\setmainfont{Fira Sans Light}  % Needs to be specified again!
+\setmathfont{TeX Gyre Pagella Math}[Scale=MatchLowercase]  % Just a default
+\setmathfont{Fira Sans Light}[range={up/{num,latin,Latin,greek,Greek},%
+  \mathexclam,\mathplus,\pm,\div,\minus,\mathpercent,\mathampersand,%
+  \mathquestion,\mathatsign,\increment,\less,\equal,\greater,\ne,\leq,%
+  \geq,\matheth,\ell,\partial},%
+  Script=Latin,script-features={}, sscript-features={}]
+\setmathfont{Fira Sans Light Italic}[range={it/{latin,Latin,greek,Greek}},%
+  Script=Latin, script-features={}, sscript-features={}]
+
+\hypersetup{pdfauthor   = Jeongho Jeon,
+            pdftitle    = BLS signature,
+            pdfsubject  = Ethereum Sharding Research
+            pdfkeywords = {bls signature, multi-signature, aggregate signature, threshold signature},
+            pdfproducer = LuaTeX 1.0.4,
+            pdfcreator  = VIM 7.4}
+
+\title{BLS signature}
+\subtitle{Ethereum Sharding Research}
+\date{September 6, 2018}
+\author{Jeongho Jeon <maczniak@gmail.com>}
+\institute{\textbf{Whitepaper} Foundation, Nonce\\%
+(for internal discussion purposes only)}
+%\institute{{\fontfamily{phv}\selectfont \textbf{Whitepaper}\\Foundation}, Nonce
+%(for internal discussion purposes only)}
+
+% https://tex.stackexchange.com/questions/223200/how-to-completely-remove-footer-in-beamer (remove a footer that hinders a background logo)
+\setbeamertemplate{footline}{}
+
+\usebackgroundtemplate%
+{%
+\begin{picture}(50,50)
+\put(150,-232){\hbox{\includegraphics[scale=0.1]{whitepaper_colored.png}}}
+\end{picture}%
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{DISCLAIMER}
+This talk is based on \textit{Compact Multi-Signatures for Smaller Blockchains} (2018). It refers to \textit{Simple Schnorr Multi-signatures with Applications to Bitcoin} (2018).
+\end{frame}
+
+\begin{frame}{BLS signature}
+Dan \textbf{B}oneh, Ben \textbf{L}ynn, Hovav \textbf{S}hacham, \textit{Short Signatures from the Weil Pairing} (2004)
+\begin{itemize}
+\item multi-signature
+\item aggregate signature
+\item threshold signature
+\end{itemize}
+\end{frame}
+
+\begin{frame}{multi-signature 1/2}
+\begin{itemize}
+\item not BIP 0011\\x sig\textsubscript{1} \ldots sig\textsubscript{m} m\footnote{1-16} pubkey\textsubscript{1} \ldots pubkey\textsubscript{n} n\footnote{1-16} \texttt{OP\_CHECKMULTISIG}
+\item make the constant size signature out of many signatures of the same document (transaction)
+\item we can shorten the above script!
+\item there are multi-signature schemes that are based on various techniques: RSA, discrete logarithms, pairings, and lattices.
+\item BLS signature scheme is based on a pairing.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{multi-signature 2/2}
+\begin{itemize}
+\item vs Schnorr signature scheme (2006)
+\item Schnorr - aggregate only when signing, require multi-round protocol between signers
+\item BLS - can aggregate at later time, aggregate by a simple multiplication (see also ``public key aggregation''), allow off-line signers
+\end{itemize}
+\end{frame}
+
+\begin{frame}{pairing 1/2}
+\begin{itemize}
+\item $\hat{e}(R+S,T)=\hat{e}(R,T)\hat{e}(S,T)$, $\hat{e}(R,S+T)=\hat{e}(R,S)\hat{e}(R,T)$
+\item bilinear: $\hat{e}(aS,bT)=\hat{e}(S,T)^{ab}$
+\item key generation: $pk \leftarrow g_2^{sk}$
+\item sign: $\sigma \leftarrow H(m)^{sk}$
+\item verify: $\hat{e}(\sigma,g_2)=\hat{e}(H(m),pk)$
+\item $\hat{e}(H(m)^{sk},g_2)=\hat{e}(H(m),g_2^{sk})$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{pairing 2/2}
+\begin{itemize}
+\item $\sigma \leftarrow \sigma_1\cdots\sigma_n$
+\item $\hat{e}(\sigma,g_2)=\hat{e}(H(m_1),pk_1)\cdots\hat{e}(H(m_n),pk_n)$
+\item $\hat{e}(\sigma,g_2)=\hat{e}(H(m),pk_1\cdots pk_n)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{aggregate signature (AS)}
+Dan Boneh, Craig Gentry, Ben Lynn, Hovav Shacham, \textit{Aggregate and Verifiably Encrypted Signatures from Bilinear Maps} (2003)
+\begin{itemize}
+\item aggregate signatures of many parties that sign each their own message (transaction) into a single short signature
+\item we can compress all signatures in a block!
+\item vs $\Gamma$-signature (without bilinear maps, 2013; Bitcoin application, 2018)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{threshold signature}
+Alexandra Boldyreva, \textit{Threshold signatures, multisignatures and blind signatures based on the gapDiffie-Hellman-group signature scheme} (2002)
+\begin{itemize}
+\item t-of-n signatures
+\item accountable-subgroup multi-signature (ASM)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{BLS in cryptocurrencies}
+\begin{enumerate}
+\item Hot-Stuff and CodeChain use the threshold signature for combining validators' signatures in a block header. It reduces communication complexity, too.
+\item Chia (Script) has \texttt{OP\_BLSAGGREGATE}.
+\item DFINITY makes the random beacon by using the threshold version of BLS. (vs VDF)
+\end{enumerate}
+\end{frame}
+
+\end{document}
